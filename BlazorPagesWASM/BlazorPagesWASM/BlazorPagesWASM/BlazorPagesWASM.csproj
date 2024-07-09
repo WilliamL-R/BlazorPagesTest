@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <PublishUrl>docs</PublishUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BlazorPagesWASM.Client\BlazorPagesWASM.Client.csproj" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.6" />
+  </ItemGroup>
+
+  <Target Name="StaticWebAssets" AfterTargets="Publish">
+    <Exec Command="dotnet msbuild /t:GenerateStaticWebAssets /p:Configuration=$(Configuration)" />
+  </Target>
+
+</Project>
