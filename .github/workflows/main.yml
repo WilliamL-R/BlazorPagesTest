@@ -4,7 +4,7 @@ permissions:
   checks: write        # Necessary to write reports
   pull-requests: write # Necessary to comment on PRs
   id-token: write
-  contents: read
+  contents: write
   packages: write
   
 # Run workflow on every push to the master branch
@@ -20,7 +20,7 @@ jobs:
     # uses GitHub's checkout action to checkout code form the master branch
     - uses: actions/checkout@v2
     
-    # sets up .NET Core SDK 3.1
+    # sets up .NET SDK 8.0
     - name: Setup .NET Core SDK
       uses: actions/setup-dotnet@v3
       with:
@@ -30,9 +30,17 @@ jobs:
     - name: Publish .NET Core Project
       run: dotnet publish blazor-github-pages.csproj -c Release -o release --nologo
 
+    # changes the base-tag in index.html from '/' to 'BlazorPagesTest' to match GitHub Pages repository subdirectory
+    - name: Change base-tag in index.html from / to BlazorPagesTest
+      run: sed -i 's/<base href="\/" \/>/<base href="\/BlazorPagesTest\/" \/>/g' release/wwwroot/index.html
+
+    # add .nojekyll file to tell GitHub pages to not treat this as a Jekyll project. (Allow files and folders starting with an underscore)
+    - name: Add .nojekyll file
+      run: touch release/wwwroot/.nojekyll
+
     - name: Commit wwwroot to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@3.7.1
       with:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        BRANCH: main
+        BRANCH: gh-pages
         FOLDER: release/wwwroot
