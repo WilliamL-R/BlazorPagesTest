@@ -1,5 +1,11 @@
 name: Deploy to GitHub Pages
-
+permissions:
+  actions: write       # Necessary to cancel workflow executions
+  checks: write        # Necessary to write reports
+  pull-requests: write # Necessary to comment on PRs
+  contents: read
+  packages: write
+  
 # Run workflow on every push to the master branch
 on:
   push:
