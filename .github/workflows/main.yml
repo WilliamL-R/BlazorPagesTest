@@ -4,7 +4,7 @@ permissions:
   checks: write        # Necessary to write reports
   pull-requests: write # Necessary to comment on PRs
   id-token: write
-  contents: read
+  contents: write
   packages: write
   
 # Run workflow on every push to the master branch
